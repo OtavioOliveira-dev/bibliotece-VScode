@@ -94,7 +94,7 @@ int validarLogin(struct Bibliotecario bibliotecarios[], int numBibliotecarios){
 
     }
     printf("**Nome ou Senha invalida,**.\nEnter para voltar");
-    getchar();
+    getchar();//para pausar o progama para n ir para procima tela direto
     getchar();
     return 0;// retorna 0 se o login estiver errado
     //Estrutura para validar login.
@@ -111,7 +111,7 @@ void exibirLivros(struct Livro livros[],int numLivros){
     printf("\n###Livros cadastrados###\n");
     // int i = 0: significa que o contador i em 0, indica que o primeiro livro está na posição 0 do array.
     for(int i = 0;i < numLivros;i++){
-        printf("%d.%s-%s(%s)\n",i+1,livros[i].nome,livros[i].autor,livros[i].disponivel ?"Disponivel":"Reservado");
+        printf("%d. %s- %s (%s)\n",i+1,livros[i].nome,livros[i].autor,livros[i].disponivel ?"Disponivel":"Reservado");
     }
     printf("\n\n**Aperte enter para voltar**");
     getchar();
@@ -120,16 +120,36 @@ void exibirLivros(struct Livro livros[],int numLivros){
 
 }
 void exibirUsuarios(struct Usuario usuarios[],int numUsuarios){
+    
+    if(numUsuarios == 0){
+        printf("\nNenhum usuario cadastrado\n");
+        return;
+    }
+    
     printf("\n###Usuarios cadastrados###\n");
     for(int i = 0;i < numUsuarios;i++){
-        printf("%d.%s-%danos-RA%s",i+1,usuarios[i].nome,usuarios[i].idade,usuarios[i].RA);
+        printf("%d. %s - %d anos-RA %s\n",i+1,usuarios[i].nome,usuarios[i].idade,usuarios[i].RA);
     }
+    printf("\n\n**Aperte enter para voltar**");
+    getchar();
+    getchar();
+    system("cls");
 }
 void exibirBibliotecarios(struct Bibliotecario bibliotecarios[],int numBibliotecarios){
+   
+   if(numBibliotecarios== 0){
+        printf("\nNenhum bibliotecario cadastrado\n");
+        return;
+    }
+   
     printf("\n###Bibliotecarios cadastrados###\n");
     for(int i=0;i <numBibliotecarios;i++){
-        printf("%d.%s",i+1,bibliotecarios[i].nome);
+        printf("%d. %s \n",i+1,bibliotecarios[i].nome);
     }
+    printf("\n\n**Aperte enter para voltar**");
+    getchar();
+    getchar();
+    system("cls");
     //do exibir livros até exibir bibliotecarios são as Estruturas para chamar a lista
 }
 //---------------------------------------------------------------------------------------------------------------------
@@ -140,8 +160,8 @@ void excluirLivros(struct Livro livros[],int *numLivros){
         printf("Nenhum livro cadastrado.\n");
         return;
     }
-    exibirLivros(livros, &numLivros);
-    printf("Digite o numero do livro quedeseja excluir: ");
+    exibirLivros(livros, *numLivros);
+    printf("Digite o numero do livro que deseja excluir: ");
     scanf("%d",&escolha);
 
     if(escolha < 1 || escolha > *numLivros){
@@ -153,6 +173,44 @@ void excluirLivros(struct Livro livros[],int *numLivros){
     }
     (*numLivros)--;// Diminui o numero de livros.
     printf("\n**livro excluido com sucesso**\n");
+}
+void excluirUsuarios(struct Usuario usuarios[],int *numUsuarios){
+    int escolha;
+
+    if(numUsuarios == 0){
+        printf("Nenhum usuario cadastrado.\n");
+        return;
+    }
+    exibirUsuarios(usuarios,*numUsuarios);
+    printf("Digite o numero do usuario que deseja excluir: ");
+    scanf("%d",&escolha);
+
+    if(escolha < 1 || escolha > *numUsuarios){
+        printf("opcao invalida.\n");
+    }
+    for(int i = escolha -1;i < *numUsuarios -1;i++){
+        (usuarios[i]=usuarios[i+1]);
+    }
+    (*numUsuarios)--;
+}
+void excluirBibliotecarios(struct Bibliotecario bibliotecarios[],int *numBibliotecarios){
+    int escolha;
+
+    if(numBibliotecarios == 0){
+        printf("Nenhum bibliotecario cadastrado.\n");
+        return;
+    }
+    exibirBibliotecarios(bibliotecarios,*numBibliotecarios);
+    printf("Digite o numero do bibliotecario que deseja excluir: ");
+    scanf("%d",&escolha);
+
+    if(escolha < 1 || escolha > *numBibliotecarios){
+        printf("opcao invalida.\n");
+    }
+    for(int i = escolha -1;i < *numBibliotecarios -1;i++){
+        (bibliotecarios[i]=bibliotecarios[i+1]);
+    }
+    (*numBibliotecarios)--;
 }
 void exibirMenu(struct Livro livros[],int *numLivros,struct Usuario usuarios[],int *numUsuarios,struct Bibliotecario bibliotecarios[],int *numBibliotecarios){
     int sub_menu,exclu_menu;
@@ -176,11 +234,11 @@ void exibirMenu(struct Livro livros[],int *numLivros,struct Usuario usuarios[],i
                 break;
             case 2:
                 // exibirUsuarios(usuarios, numUsuarios);
-                printf("Exibir usuários...\n");
+                exibirUsuarios(usuarios,*numUsuarios);
                 break;
             case 3:
                 // exibirBibliotecarios(bibliotecarios, numBibliotecarios);
-                printf("Exibir bibliotecários...\n");
+                exibirBibliotecarios(bibliotecarios,*numBibliotecarios);
                 break;
             case 4:
                 do {
@@ -193,16 +251,16 @@ void exibirMenu(struct Livro livros[],int *numLivros,struct Usuario usuarios[],i
 
                     switch (exclu_menu) {
                         case 1:
-                            // excluirLivros(livros, numLivros);
-                            printf("Excluir livros...\n");
+                            // excluirLivros.
+                            excluirLivros(livros,numLivros);
                             break;
                         case 2:
-                            // excluirUsuarios(usuarios, numUsuarios);
-                            printf("Excluir usuários...\n");
+                            // excluirUsuarios.
+                            excluirUsuarios(usuarios,numUsuarios);
                             break;
                         case 3:
-                            // excluirBibliotecario(bibliotecarios, numBibliotecarios);
-                            printf("Excluir bibliotecário...\n");
+                            // excluirBibliotecario.
+                            excluirBibliotecarios(bibliotecarios,numBibliotecarios);
                             break;
                         case 0:
                             break;
