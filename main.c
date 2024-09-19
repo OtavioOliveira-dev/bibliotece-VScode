@@ -5,6 +5,7 @@
 #define max_usuarios 10
 #define max_bibliotecarios 5
 #define max_livros 10
+#define max_emprestimos 10
 // Define está definindo o maximo de usuarios,bibliotecarios e livros que podem ser cadastrados.
 struct Usuario{
     char nome[30];
@@ -18,13 +19,66 @@ struct Bibliotecario{
 
 };
 // Estrutura para armazenar dados dos bibliotecários.
-
 struct Livro{
     char nome[30];
     char autor[30];
+    char cod_li[10];
     int disponivel;
 };
 // Estrutura para armazenar dados dos livros.
+struct Emprestimo{
+   char cod_li[10];
+   char RA[8];
+};
+//Estrutura para armazenar usuário a livro emprestado.
+void emprestarLivro(struct Usuario usuarios[],int numUsuarios,struct Livro livros[],int numLivros,struct Emprestimo emprestimos[],int *numEmprestimos){
+    char cod_li[10],RA[8];
+    int livroInd = -1,usuarioInd = -1;// variavel indice criada para comparar se existe ou não usuario e livro.
+
+    printf("\nDigite o codigo do livro que deseja emprestar: ");
+    scanf(" %[^\n]s", &cod_li);
+
+    for(int i = 0;i < numLivros;i++){
+        if(strcmp(livros[i].cod_li,cod_li)== 0){
+            livroInd = i;
+            break;//comando para procurar o livro,e o strcmp para verificar se o cod do livro bate com o cod digitado.
+        }
+    }
+    if(livroInd == -1){
+        printf("\nLivro nao encontrado.\n");
+        return;
+    }
+    if(livros[livroInd].disponivel == 0){
+        printf("\nLivro ja foi emprestado.\n");
+        return;
+    }
+    printf("\nDigite o RA so usuario a quem o livro vai ser emprestado: ");
+    scanf(" %[^\n]s", &RA);
+
+    for(int i = 0;i < numUsuarios;i++){
+        if(strcmp(usuarios[i].RA,RA)== 0){
+            usuarioInd = i; 
+            break;
+        }
+    }
+    if(usuarioInd == -1){
+        printf("\nUsuario nao encontrado.\n");
+        return;
+    }
+    livros[livroInd].disponivel = 0;
+    //Empresta o livro e marca como emprestado
+
+    strcpy(emprestimos[*numEmprestimos].cod_li, livros[livroInd].cod_li);
+    strcpy(emprestimos[*numEmprestimos].RA, usuarios[usuarioInd].RA);
+    (*numEmprestimos)++;
+    //registra o emprestimo.
+    printf("\nLivro '%s' foi emprestado para o usuario '%s'.\n ",livros[livroInd].nome,usuarios[usuarioInd].nome);
+    getchar();
+    getchar();
+    system("cls");
+}
+
+
 void cadastrarUsuario(struct Usuario usuarios[],int *numUsuarios){
     if(*numUsuarios >= max_usuarios){
         printf("***Limite de usuarios atingido***\n");
@@ -68,6 +122,8 @@ void cadastrarLivro(struct Livro livros[],int *numLivros){
     scanf(" %[^\n]s", &livros[*numLivros].nome);
     printf("Autor: ");
     scanf(" %[^\n]s", &livros[*numLivros].autor);
+    printf("codigo: ");
+    scanf(" %[^\n]s", &livros[*numLivros].cod_li);
     livros[*numLivros].disponivel = 1;
     (*numLivros)++;
     printf("\n**livro cadrastado com sucesso**\n");
@@ -111,7 +167,7 @@ void exibirLivros(struct Livro livros[],int numLivros){
     printf("\n###Livros cadastrados###\n");
     // int i = 0: significa que o contador i em 0, indica que o primeiro livro está na posição 0 do array.
     for(int i = 0;i < numLivros;i++){
-        printf("%d. %s- %s (%s)\n",i+1,livros[i].nome,livros[i].autor,livros[i].disponivel ?"Disponivel":"Reservado");
+        printf("%d. %s- %s codigo *%s* (%s)\n",i+1,livros[i].nome,livros[i].autor,livros[i].cod_li,livros[i].disponivel ?"Disponivel":"Reservado");
     }
     printf("\n\n**Aperte enter para voltar**");
     getchar();
@@ -156,7 +212,7 @@ void exibirBibliotecarios(struct Bibliotecario bibliotecarios[],int numBibliotec
 void excluirLivros(struct Livro livros[],int *numLivros){
     int escolha;
 
-    if(numLivros == 0){
+    if(*numLivros == 0){
         printf("Nenhum livro cadastrado.\n");
         return;
     }
@@ -166,6 +222,7 @@ void excluirLivros(struct Livro livros[],int *numLivros){
 
     if(escolha < 1 || escolha > *numLivros){
         printf("Opcao invalida.\n");
+        return;
     }
     //remove o livro e ajusta o array.
     for(int i = escolha -1;i < *numLivros - 1;i++){
@@ -177,7 +234,7 @@ void excluirLivros(struct Livro livros[],int *numLivros){
 void excluirUsuarios(struct Usuario usuarios[],int *numUsuarios){
     int escolha;
 
-    if(numUsuarios == 0){
+    if(*numUsuarios == 0){
         printf("Nenhum usuario cadastrado.\n");
         return;
     }
@@ -187,6 +244,7 @@ void excluirUsuarios(struct Usuario usuarios[],int *numUsuarios){
 
     if(escolha < 1 || escolha > *numUsuarios){
         printf("opcao invalida.\n");
+        return;
     }
     for(int i = escolha -1;i < *numUsuarios -1;i++){
         (usuarios[i]=usuarios[i+1]);
@@ -196,7 +254,7 @@ void excluirUsuarios(struct Usuario usuarios[],int *numUsuarios){
 void excluirBibliotecarios(struct Bibliotecario bibliotecarios[],int *numBibliotecarios){
     int escolha;
 
-    if(numBibliotecarios == 0){
+    if(*numBibliotecarios == 0){
         printf("Nenhum bibliotecario cadastrado.\n");
         return;
     }
@@ -206,13 +264,14 @@ void excluirBibliotecarios(struct Bibliotecario bibliotecarios[],int *numBibliot
 
     if(escolha < 1 || escolha > *numBibliotecarios){
         printf("opcao invalida.\n");
+        return;
     }
     for(int i = escolha -1;i < *numBibliotecarios -1;i++){
         (bibliotecarios[i]=bibliotecarios[i+1]);
     }
     (*numBibliotecarios)--;
 }
-void exibirMenu(struct Livro livros[],int *numLivros,struct Usuario usuarios[],int *numUsuarios,struct Bibliotecario bibliotecarios[],int *numBibliotecarios){
+void exibirMenu(struct Livro livros[],int *numLivros,struct Usuario usuarios[],int *numUsuarios,struct Bibliotecario bibliotecarios[],int *numBibliotecarios,struct Emprestimo emprestimos[],int *numEmprestimos){
     int sub_menu,exclu_menu;
     do {
         printf("\n***Escolha uma opcao***\n");
@@ -220,7 +279,7 @@ void exibirMenu(struct Livro livros[],int *numLivros,struct Usuario usuarios[],i
         printf("Lista de usuarios[2]\n");
         printf("Lista de bibliotecarios[3]\n");
         printf("Excluir livros/usuarios/bibliotecarios[4]\n");
-        printf("Devolucao de livros[5]\n");
+        printf("Emprestimo de livros[5]\n");
         printf("Bloqueio de usuario[6]\n");
         printf("Relatorios[7]\n");
         printf("voltar[0]\n");
@@ -271,8 +330,8 @@ void exibirMenu(struct Livro livros[],int *numLivros,struct Usuario usuarios[],i
                 } while (exclu_menu != 0);
                 break;
             case 5:
-                // Implementar devolução de livros
-                printf("Devolução de livros...\n");
+                // Implementar emprestimo de livros
+                emprestarLivro(usuarios,*numUsuarios,livros,*numLivros, emprestimos,numEmprestimos);
                 break;
             case 6:
                 // Implementar bloqueio de usuário
@@ -303,8 +362,9 @@ int main(){
     struct Usuario usuarios[max_usuarios];
     struct Bibliotecario bibliotecarios[max_bibliotecarios];
     struct Livro livros[max_livros];
+    struct Emprestimo emprestimos[max_emprestimos];
 
-    int numUsuarios = 0, numBibliotecarios = 0, numLivros = 0;
+    int numUsuarios = 0, numBibliotecarios = 0, numLivros = 0, numEmprestimos = 0;
     int opcao;
     memset(livros, 0, sizeof(livros));
 
@@ -331,7 +391,7 @@ int main(){
                 break;
             case 4:
               if(validarLogin(bibliotecarios, numBibliotecarios)){
-                exibirMenu(livros,&numLivros,usuarios,&numUsuarios,bibliotecarios,&numBibliotecarios);
+                exibirMenu(livros,&numLivros,usuarios,&numUsuarios,bibliotecarios,&numBibliotecarios,emprestimos,&numEmprestimos);
               }
 
             case 0:
