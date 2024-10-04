@@ -6,7 +6,7 @@
 #define max_bibliotecarios 5
 #define max_livros 10
 #define max_emprestimos 10
-#define max_admins 10
+#define max_admins 3
 // Define está definindo o maximo de usuarios,bibliotecarios e livros que podem ser cadastrados.
 //..................................................................................................................................................................
 struct Usuario{
@@ -38,6 +38,24 @@ struct Admin{
     char nome[30];
     char senha[20];
 };//Estrutura para admin.(já sera pré-definido) 
+//..................................................................................................................................................................
+void manualMenuB(){
+printf("=======================================\n");
+printf("    Manual do Menu de Bibliotecario    \n");
+printf("=======================================\n");
+printf("Este menu oferece ao Bibliotecario as seguintes opcoes.\n");
+printf("1. *Usuarios* permite o cadastro de usuarios assim como atualizacoes e sua exclusao.\n");
+printf("2. *Livros* permite o cadastro de livros assim como atualizacoes e sua exclusao .\n");
+printf("3. *Emprestar Livro* permite o emprestimo de livros, utilizando o codigo do livro junto ao RA do usuario que deseja emprestar marcando o livro com (reservado).\n");
+printf("4. *Devolver Livro* permite a devolucao de livros, utilizando o codigo do livro junto ao RA do usuario marcando o livro como disponivel.\n");
+printf("5. *Relatorios* permite visualizar a lista de todos Bibliotecarios, Usuarios e Livros cadastrados no sistema.\n");
+printf("6. *(Leia)Manual de navegacao* permite a orientacao das funcoes dos menus de Bibliotecario.\n");
+printf("0. *voltar* permite a volta ao menu anterior.\n");
+getchar();
+getchar();
+system("cls");
+}
+
 //..................................................................................................................................................................
 void atualizarBibliotecario(struct Bibliotecario bibliotecarios[],int *numBibliotecarios){
    char cod_b[10];
@@ -145,6 +163,7 @@ void emprestarLivro(struct Usuario usuarios[],int *numUsuarios,struct Livro livr
 
     printf("\nDigite o codigo do livro que deseja emprestar: ");
     scanf(" %[^\n]s", &cod_li);
+    getchar();
 
     for(int i = 0;i < *numLivros;i++){
         if(strcmp(livros[i].cod_li,cod_li)== 0){
@@ -160,6 +179,7 @@ void emprestarLivro(struct Usuario usuarios[],int *numUsuarios,struct Livro livr
     if(livros[livroInd].disponivel == 0){
         printf("\nLivro ja foi emprestado.\n");
         getchar();
+        system("cls");
         return;
     }
     printf("\n###Usuarios cadastrados###\n");
@@ -265,7 +285,7 @@ void cadastrarLivro(struct Livro livros[],int *numLivros){
         printf("\n***Limite de livros atingido***\n");
         return;
     }
-
+    
     printf("###Cadastro de livros###\n");
     printf("Nome do livro: ");
     scanf(" %[^\n]s", &livros[*numLivros].nome);
@@ -294,7 +314,9 @@ void cadastrarLivro(struct Livro livros[],int *numLivros){
 int validarLogin(struct Bibliotecario bibliotecarios[], int numBibliotecarios){
     char nome[30], senha[20];
     int i;
-
+    printf("\n=================================\n");
+    printf(" **Bibliotecario seja Bem vindo**\n");
+    printf("=================================\n");
     printf("##Login##\n");
     printf("Nome: ");
     scanf(" %[^\n]s", nome);
@@ -319,7 +341,9 @@ int validarLoginAdm(struct Admin admins[], int numAdmins){
     char nome_adm[30];
     char senha_adm[20];
     int i;
-    printf(" \n**Administrador seja Bem vindo** \n");
+    printf("\n==================================\n");
+    printf(" **Administrador seja Bem vindo** \n");
+    printf("==================================\n");
     printf("\n Digite nome de Admin: ");
     scanf(" %[^\n]s", &nome_adm);
     printf("\n Digite a senha: ");
@@ -328,6 +352,8 @@ int validarLoginAdm(struct Admin admins[], int numAdmins){
     for(i=0;i < numAdmins;i++){
         if(strcmp(admins[i].nome,nome_adm)== 0 && strcmp(admins[i].senha,senha_adm)==0 ){
             printf("\n **Login realizado com sucesso** \n");
+            getchar();
+            system("cls");
             return 1;
         }
     }
@@ -411,14 +437,20 @@ void excluirLivros(struct Livro livros[],int *numLivros){
 
     if(*numLivros == 0){
         printf("Nenhum livro cadastrado.\n");
+        getchar();
         return;
     }
-    exibirLivros(livros, *numLivros);
+    printf("\n###Livros cadastrados###\n");
+    for(int j = 0;j < *numLivros;j++){
+        printf("%d. Livro: %s - (Autor): %s - codigo: *%s* (%s)\n",j+1,livros[j].nome,livros[j].autor,livros[j].cod_li,livros[j].disponivel ?"Disponivel":"Reservado");
+    }
     printf("Digite o numero do livro que deseja excluir: ");
     scanf("%d",&escolha);
+    getchar();
 
     if(escolha < 1 || escolha > *numLivros){
         printf("Opcao invalida.\n");
+        getchar();
         return;
     }
     //remove o livro e ajusta o array.
@@ -426,7 +458,9 @@ void excluirLivros(struct Livro livros[],int *numLivros){
         (livros[i]=livros[i+1]); //move todos os livros uma posição para traz no array.
     }
     (*numLivros)--;// Diminui o numero de livros.
-    printf("\n**livro excluido com sucesso**\n");
+    printf("\n**Livro excluido com sucesso**\n");
+    getchar();
+    system("cls");
 }//Estrutura para excluir livros.
 //..................................................................................................................................................................
 void excluirUsuarios(struct Usuario usuarios[],int *numUsuarios){
@@ -434,20 +468,30 @@ void excluirUsuarios(struct Usuario usuarios[],int *numUsuarios){
 
     if(*numUsuarios == 0){
         printf("Nenhum usuario cadastrado.\n");
+        getchar();
         return;
     }
-    exibirUsuarios(usuarios,*numUsuarios);
+    printf("\n###Usuarios cadastrados###\n");
+    for(int j = 0;j < *numUsuarios;j++){
+        printf("%d. Nome: %s - Idade: %d - RA: %s\n",j+1,usuarios[j].nome,usuarios[j].idade,usuarios[j].RA);
+    }
     printf("Digite o numero do usuario que deseja excluir: ");
     scanf("%d",&escolha);
+    getchar();
 
     if(escolha < 1 || escolha > *numUsuarios){
         printf("opcao invalida.\n");
+        getchar();
+
         return;
     }
     for(int i = escolha -1;i < *numUsuarios -1;i++){
         (usuarios[i]=usuarios[i+1]);
     }
     (*numUsuarios)--;
+     printf("\n**Usuario excluido com sucesso**\n");
+    getchar();
+    system("cls");
 }//Estrutura para excluir usuarios.
 //..................................................................................................................................................................
 void excluirBibliotecarios(struct Bibliotecario bibliotecarios[],int *numBibliotecarios){
@@ -455,26 +499,40 @@ void excluirBibliotecarios(struct Bibliotecario bibliotecarios[],int *numBibliot
 
     if(*numBibliotecarios == 0){
         printf("Nenhum bibliotecario cadastrado.\n");
+        getchar();
         return;
     }
-    exibirBibliotecarios(bibliotecarios,*numBibliotecarios);
-    printf("Digite o numero do bibliotecario que deseja excluir: ");
+    printf("\n###Bibliotecarios cadastrados###\n");
+    for(int j=0;j < *numBibliotecarios;j++){
+        printf("%d. Bibliotecario: %s - Codigo: %s\n",j+1,bibliotecarios[j].nome,bibliotecarios[j].cod_b);
+    }
+    printf("\n\nDigite o numero de acordo com a lista bibliotecario que deseja excluir: ");
     scanf("%d",&escolha);
+    getchar();
+    
 
     if(escolha < 1 || escolha > *numBibliotecarios){
         printf("opcao invalida.\n");
+        getchar();
+        system("cls");
         return;
     }
     for(int i = escolha -1;i < *numBibliotecarios -1;i++){
         (bibliotecarios[i]=bibliotecarios[i+1]);
     }
+    
     (*numBibliotecarios)--;
+     printf("\n**Bibliotecario excluido com sucesso**\n");
+    getchar();
+    system("cls");
 }//Estrutura para excluir bibliotecario.
 //..................................................................................................................................................................
 void relatorios(struct Livro livros[],int *numLivros,struct Usuario usuarios[],int *numUsuarios,struct Bibliotecario bibliotecarios[],int *numBibliotecarios){
     int menu_r;
     do{
-    printf("\n Escolha qual lista de relatorio deseja acessar. \n");
+    printf("\n=================================================\n");
+    printf(" Escolha qual lista de relatorio deseja acessar. \n");
+    printf("=================================================\n");
     printf(" [1] Lista de Bibliotecarios. \n");
     printf(" [2] Lista de Usuarios. \n");
     printf(" [3] Lista de Livros. \n");
@@ -504,11 +562,13 @@ void relatorios(struct Livro livros[],int *numLivros,struct Usuario usuarios[],i
 void exibirMenu(struct Livro livros[],int *numLivros,struct Usuario usuarios[],int *numUsuarios,struct Bibliotecario bibliotecarios[],int *numBibliotecarios,struct Emprestimo emprestimos[],int *numEmprestimos){
     int sub_menu,menu_u,menu_l;
     do {
-        printf("\n***Escolha uma opcao***\n");
+        printf("\n=========================\n");
+        printf(" ***Escolha uma opcao*** \n");
+        printf("=========================\n");
         printf(" [1] Usuarios. \n");
         printf(" [2] Livros. \n");
         printf(" [3] Emprestar Livro. \n");
-        printf(" [4] Devolucao de Livro.\n");
+        printf(" [4] Devolver Livro.\n");
         printf(" [5] Relatorios. \n");
         printf(" [6] **(Leia)Manual de navegacao ** \n");
         printf(" [0] voltar\n");
@@ -582,7 +642,7 @@ void exibirMenu(struct Livro livros[],int *numLivros,struct Usuario usuarios[],i
                 relatorios(livros,numLivros,usuarios,numUsuarios,bibliotecarios,numBibliotecarios);
                 break;
             case 6:
-                printf("Manual de navegação em processo");
+                manualMenuB();
             case 0:
                 printf("Voltando ao menu principal...\n");
                 break;
@@ -597,7 +657,9 @@ void exibirMenuAdm(struct Livro livros[],int *numLivros,struct Usuario usuarios[
     int menu,menu_b;
 
     do{
-        printf("\n *** Bem vindo Administrador *** \n");
+        printf("\n=================================\n");
+        printf(" *** Bem vindo Administrador *** \n");
+        printf("=================================\n");
         printf("\n [1] Bibliotecario. \n");
         printf(" [2] relatorios.\n");
         printf(" [0] Para voltar.\n");
@@ -607,7 +669,9 @@ void exibirMenuAdm(struct Livro livros[],int *numLivros,struct Usuario usuarios[
         switch(menu){
             case 1:  
             do{ 
-                printf("\n ### Menu de Bibliotecario ### \n");
+                printf("\n===============================\n");
+                printf(" ### Menu de Bibliotecario ### \n");
+                printf("===============================\n");
                 printf("\n [1] Cadastrar Bibliotecario. \n");
                 printf(" [2] excluir Bibliotecario. \n");
                 printf(" [3] Atualizar cadastro de Bibliotecario. \n");
@@ -670,7 +734,9 @@ int main(){
     iniciarAdmins(admins, &numAdmins);
 
     do{
-        printf("\n#### Bem vindo a Biblioteca 'ds2p17' ###\n");
+        printf("=========================================\n");
+        printf("#### Bem vindo a Biblioteca 'ds2p17' ####\n");
+        printf("=========================================\n");
         printf(" [1] Entrar como Admin. \n");
         printf(" [2] Entrar como Bibliotecarios. \n");
         printf(" [0] sair. \n");
