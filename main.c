@@ -1,15 +1,13 @@
 #include <stdio.h>//Utilizada nesse PGM pelo printf()/scanf().
-#include <string.h>//Utilizada para strcmp/strcpy.
-#include <stdlib.h>// talvez um uso de exit (ainda n em uso).
+#include <string.h>//Utilizada para strcmp/strcpy/memset.
+#include <stdlib.h>// talvez um uso de exit/system.
 //..................................................................................................................................................................
 #define max_usuarios 10
 #define max_bibliotecarios 5
 #define max_livros 10
 #define max_emprestimos 10
 #define max_admins 3
-#ifdef _WIN32
-#include <windows.h>
-#endif
+
 // Define está definindo o maximo de usuarios,bibliotecarios e livros que podem ser cadastrados.
 //..................................................................................................................................................................
 struct Usuario{
@@ -44,15 +42,15 @@ struct Admin{
 //..................................................................................................................................................................
 void manualMenuB(){
 printf("=======================================\n");
-printf("    Manual do Menu de Bibliotecário    \n");
+printf("    Manual do Menu de Bibliotecario    \n");
 printf("=======================================\n");
-printf("Este menu oferece ao Bibliotecário as seguintes opcoes.\n");
-printf("1. *Usuários* permite o cadastro de usuários assim como atualizações e sua exclusão.\n");
-printf("2. *Livros* permite o cadastro de livros assim como atualizacoes e sua exclusão .\n");
-printf("3. *Emprestar Livro* permite o empréstimo de livros, utilizando o código do livro junto ao RA do usuário que deseja emprestar marcando o livro com (reservado).\n");
-printf("4. *Devolver Livro* permite a devolucao de livros, utilizando o código do livro junto ao RA do usuário marcando o livro como disponivel.\n");
-printf("5. *Relatorios* permite visualizar a lista de todos Bibliotecários, Usuários,Livros cadastrados e empréstimos no sistema.\n");
-printf("6. *(Leia)Manual de navegacao* permite a orientação das funções no menu de Bibliotecário.\n");
+printf("Este menu oferece ao Bibliotecario as seguintes opcoes.\n");
+printf("1. *Usuarios* permite o cadastro de usuarios assim como atualizacoes e sua exclusao.\n");
+printf("2. *Livros* permite o cadastro de livros assim como atualizacoes e sua exclusao .\n");
+printf("3. *Emprestar Livro* permite o emprestimo de livros, utilizando o codigo do livro junto ao RA do usuario que deseja emprestar marcando o livro com (reservado).\n");
+printf("4. *Devolver Livro* permite a devolucao de livros, utilizando o codigo do livro junto ao RA do usuario marcando o livro como disponivel.\n");
+printf("5. *Relatorios* permite visualizar a lista de todos Bibliotecarios, Usuarios,Livros cadastrados e emprestimos no sistema.\n");
+printf("6. *(Leia)Manual de navegacao* permite a orientaçao das funcoes no menu de Bibliotecario.\n");
 printf("0. *voltar* permite a volta ao menu anterior.\n");
 getchar();
 getchar();
@@ -62,26 +60,26 @@ system("cls");
 //..................................................................................................................................................................
 void atualizarBibliotecario(struct Bibliotecario bibliotecarios[],int *numBibliotecarios){
    char cod_b[10];
-   printf("\n###Bibliotecários cadastrados###\n");
+   printf("\n###Bibliotecarios cadastrados###\n");
     for(int j=0;j < *numBibliotecarios;j++){
-        printf("%d. Bibliotecário: %s - Código: %s\n",j+1,bibliotecarios[j].nome,bibliotecarios[j].cod_b);
+        printf("%d. Bibliotecario: %s - Codigo: %s\n",j+1,bibliotecarios[j].nome,bibliotecarios[j].cod_b);
     }
 
-   printf("\nDigite o código do bibliotecário a ser atualizado: ");
+   printf("\nDigite o codigo do bibliotecario a ser atualizado: ");
    scanf(" %[^\n]s", &cod_b);
    getchar();
 
     for(int i= 0;i < *numBibliotecarios;i++){
         if(strcmp(bibliotecarios[i].cod_b,cod_b)== 0){
-            printf("\n*Bibliotecário encontrado*\n");
-            printf("\nDigite o novo nome do Bibliotecário: ");
+            printf("\n*Bibliotecario encontrado*\n");
+            printf("\nDigite o novo nome do Bibliotecario: ");
             scanf(" %[^\n]s", &bibliotecarios[i].nome);
             getchar();
 
             printf("\nDigite nova a senha: ");
             scanf(" %[^\n]s", &bibliotecarios[i].senha);
                       
-            printf("\n**Bibliotecário atualizado sucesso**\n\n *Enter para voltar*");
+            printf("\n**Bibliotecario atualizado sucesso**\n\n *Enter para voltar*");
             getchar();
             getchar();
             system("cls");
@@ -89,40 +87,42 @@ void atualizarBibliotecario(struct Bibliotecario bibliotecarios[],int *numBiblio
         }
                        
     }
-    printf("\n Bibliotecário com o código %s nao encontrado. \n\n aperte Enter. \n", cod_b);
+    printf("\n Bibliotecario com o codigo %s nao encontrado. \n\n aperte Enter. \n", cod_b);
     getchar();
+    system("cls");
 }//Estrutura para atualização de cadastro de bibliotecarios.
 //...................................................................................................................................................................
 void atualizarUsuario(struct Usuario usuarios[],int *numUsuarios){
     char cod_u[10];
 
-    printf("\n###Usuários cadastrados###\n");
+    printf("\n###Usuarios cadastrados###\n");
     for(int j = 0;j < *numUsuarios;j++){
         printf("%d. Nome: %s - Idade: %d - RA: %s\n",j+1,usuarios[j].nome,usuarios[j].idade,usuarios[j].RA);
     }
 
-    printf("Digite o RA do usuário a ser atualizado : ");
+    printf("Digite o RA do usuario a ser atualizado : ");
     scanf( " %[^\n]s", &cod_u);
     getchar();
 
     for(int i = 0;i < *numUsuarios;i++){
         if(strcmp(usuarios[i].RA,cod_u)==0){
-            printf("\n**Usuário encontrado**\n");
-            printf("\nDigite novo nome de usuário:");
+            printf("\n**Usuario encontrado**\n");
+            printf("\nDigite novo nome de usuario:");
             scanf(" %[^\n]s", &usuarios[i].nome);
 
             printf("Digite nova idade: ");
             scanf("%d", &usuarios[i].idade);
 
-            printf("\n** Usuário atualizado com sucesso**\n\n *Enter para voltar*");
+            printf("\n** Usuario atualizado com sucesso**\n\n *Enter para voltar*");
             getchar();
             getchar();
             system("cls");
             return;
         }
     }
-    printf("\n Usuário com RA %s nao encontrado.\n",cod_u);
+    printf("\n Usuario com RA %s nao encontrado.\n",cod_u);
     getchar();
+    system("cls");
 }//Estrutura para atualização de cadastro de usuario.
 //...................................................................................................................................................................
 void atualizarLivro(struct Livro livros[],int *numLivros){
@@ -130,10 +130,10 @@ void atualizarLivro(struct Livro livros[],int *numLivros){
     
     printf("\n###Livros cadastrados###\n");
     for(int j = 0;j < *numLivros;j++){
-        printf("%d. Livro: %s - (Autor): %s - código: *%s* (%s)\n",j+1,livros[j].nome,livros[j].autor,livros[j].cod_li,livros[j].disponivel ?"Disponivel":"Reservado");
+        printf("%d. Livro: %s - (Autor): %s - codigo: *%s* (%s)\n",j+1,livros[j].nome,livros[j].autor,livros[j].cod_li,livros[j].disponivel ?"Disponivel":"Reservado");
     }
 
-    printf("\nDigite o código do livro a ser atualizado: ");
+    printf("\nDigite o codigo do livro a ser atualizado: ");
     scanf(" %[^\n]s", &cod_l);
     getchar();
 
@@ -152,8 +152,9 @@ void atualizarLivro(struct Livro livros[],int *numLivros){
         return;
         }
     }
-    printf("\n Livro com código %s nao encontrado.",cod_l);
+    printf("\n Livro com codigo %s nao encontrado.",cod_l);
     getchar();
+    system("cls");
 }// Estrutura para atualizar cadastro de livros.
 //...................................................................................................................................................................
 void emprestarLivro(struct Usuario usuarios[],int *numUsuarios,struct Livro livros[],int *numLivros,struct Emprestimo emprestimos[],int *numEmprestimos){
@@ -161,10 +162,10 @@ void emprestarLivro(struct Usuario usuarios[],int *numUsuarios,struct Livro livr
     int livroInd = -1,usuarioInd = -1;// variavel indice criada para comparar se existe ou não usuario e livro.
     printf("\n###Livros cadastrados###\n");
     for(int j = 0;j < *numLivros;j++){
-        printf("%d. Livro: %s - (Autor): %s - código: *%s* (%s)\n",j+1,livros[j].nome,livros[j].autor,livros[j].cod_li,livros[j].disponivel ?"Disponivel":"Reservado");
+        printf("%d. Livro: %s - (Autor): %s - codigo: *%s* (%s)\n",j+1,livros[j].nome,livros[j].autor,livros[j].cod_li,livros[j].disponivel ?"Disponivel":"Reservado");
     }
 
-    printf("\nDigite o código do livro que deseja emprestar: ");
+    printf("\nDigite o codigo do livro que deseja emprestar: ");
     scanf(" %[^\n]s", &cod_li);
     getchar();
 
@@ -186,11 +187,11 @@ void emprestarLivro(struct Usuario usuarios[],int *numUsuarios,struct Livro livr
         system("cls");
         return;
     }
-    printf("\n###Usuários cadastrados###\n");
+    printf("\n###Usuarios cadastrados###\n");
     for(int j = 0;j < *numUsuarios;j++){
         printf("%d. Nome: %s - Idade: %d - RA: %s\n",j+1,usuarios[j].nome,usuarios[j].idade,usuarios[j].RA);
     }
-    printf("\nDigite o RA do usuário a quem o livro vai ser emprestado: ");
+    printf("\nDigite o RA do usuario a quem o livro vai ser emprestado: ");
     scanf(" %[^\n]s", &RA);
 
     for(int i = 0;i < *numUsuarios;i++){
@@ -200,7 +201,8 @@ void emprestarLivro(struct Usuario usuarios[],int *numUsuarios,struct Livro livr
         }
     }
     if(usuarioInd == -1){
-        printf("\nUsuário nao encontrado.\n");
+        printf("\nUsuario nao encontrado.\n");
+        getchar();
         getchar();
         system("cls");
         return;
@@ -212,7 +214,8 @@ void emprestarLivro(struct Usuario usuarios[],int *numUsuarios,struct Livro livr
     strcpy(emprestimos[*numEmprestimos].RA, usuarios[usuarioInd].RA);
     (*numEmprestimos)++;
     //registra o emprestimo.
-    printf("\nLivro '%s' foi emprestado para o usuário '%s'.\n ",livros[livroInd].nome,usuarios[usuarioInd].nome);
+    printf("\nLivro '%s' foi emprestado para o usuario '%s'.\n ",livros[livroInd].nome,usuarios[usuarioInd].nome);
+    printf("Pressione enter para voltar\n");
     getchar();
     getchar();
     system("cls");
@@ -223,12 +226,11 @@ void devolverLivro(struct Usuario usuarios[],int *numUsuarios,struct Livro livro
     char cod_li[10],RA[8];
     int livroInd = -1,usuarioInd = -1, emprestimoInd = -1;
 
-    printf("\n###Empréstimos cadastrados###\n");
+    printf("\n###Emprestimos cadastrados###\n");
     for(int j = 0;j < *numEmprestimos;j++){
         printf("%d. Livro: %s - Emprestado para RA:%s\n",j + 1, emprestimos[j].cod_li,emprestimos[j].RA);
-        getchar();
     } 
-    printf("\nDigite o código do livro:");
+    printf("\nDigite o codigo do livro:");
     scanf(" %[^\n]s", &cod_li);
     getchar();
     for(int i = 0;i < *numLivros;i++){
@@ -244,14 +246,14 @@ void devolverLivro(struct Usuario usuarios[],int *numUsuarios,struct Livro livro
         return;
     }
     if(livros[livroInd].disponivel == 1){
-        printf("\nLivro ja esta disponivel para empréstimo.\n");
+        printf("\nLivro ja esta disponivel para emprestimo.\n");
         getchar();
         system("cls");
         return;
     }
-    printf("Digite o RA do usuário para devolução do livro:");
+    printf("Digite o RA do usuario para devolucao do livro:");
     scanf(" %[^\n]s", &RA);
-    getchar();
+    
     for(int i = 0;i < *numUsuarios;i++){
         if(strcmp(usuarios[i].RA,RA)== 0){
             usuarioInd = i;
@@ -259,7 +261,7 @@ void devolverLivro(struct Usuario usuarios[],int *numUsuarios,struct Livro livro
         }
     }
     if(usuarioInd == -1){
-        printf("\nUsuário nao encontrado.\n");
+        printf("\nUsuario nao encontrado.\n");
         getchar();
         system("cls");
         return;
@@ -271,7 +273,7 @@ void devolverLivro(struct Usuario usuarios[],int *numUsuarios,struct Livro livro
         }
     }
     if(emprestimoInd == -1){
-        printf("\nEmpréstimo nao encontrado.\n");
+        printf("\nEmprestimo nao encontrado.\n");
         getchar();
         system("cls");
         return;
@@ -279,14 +281,14 @@ void devolverLivro(struct Usuario usuarios[],int *numUsuarios,struct Livro livro
     // Aqui estou marcando o livro como disponivel novamente.
     livros[livroInd].disponivel = 1;
     //Aqui estou retirando o registrop de emprestimo, no caso tirando o emprestimo de numEmprestimo.
-    for(int i = emprestimoInd;emprestimoInd < *numEmprestimos -1;i++){
+    for(int i = emprestimoInd;i < *numEmprestimos -1;i++){
         emprestimos[i] = emprestimos[i + 1];
     }
     (*numEmprestimos)--;
 
-    printf("\nLivro: %s foi devolvido pelo usuário: %s com sucesso.",livros[livroInd].nome, usuarios[usuarioInd].nome);
+    printf("\nLivro: %s foi devolvido pelo usuario: %s com sucesso.",livros[livroInd].nome, usuarios[usuarioInd].nome);
     getchar();
-    getchar();
+    system("pause");
     system("cls");
 
 }
@@ -294,10 +296,10 @@ void devolverLivro(struct Usuario usuarios[],int *numUsuarios,struct Livro livro
 void cadastrarUsuario(struct Usuario usuarios[],int *numUsuarios){
     int RAduplicado;
     if(*numUsuarios >= max_usuarios){
-        printf("***Limite de usuários atingido***\n");
+        printf("***Limite de usuarios atingido***\n");
         return;
     }
-    printf("###Cadastro de usuários###\n");
+    printf("###Cadastro de usuarios###\n");
     printf("Digite o nome: ");
     scanf(" %[^\n]s", &usuarios[*numUsuarios].nome);
      do{
@@ -306,7 +308,7 @@ void cadastrarUsuario(struct Usuario usuarios[],int *numUsuarios){
         scanf(" %[^\n]s", &usuarios[*numUsuarios].RA);
         for(int i = 0;i< *numUsuarios;i++){
              if(strcmp(usuarios[i].RA,usuarios[*numUsuarios].RA)==0){
-                printf("\nRA já cadastrado, digite outro. \n");
+                printf("\nRA ja cadastrado, digite outro. \n");
                 RAduplicado = 1;
                 break;
              }
@@ -315,7 +317,7 @@ void cadastrarUsuario(struct Usuario usuarios[],int *numUsuarios){
     printf("Digite a idade: "); 
     scanf("%d", &usuarios[*numUsuarios].idade);
     (*numUsuarios)++;
-    printf("**Usuário cadastrado com sucesso**\n");
+    printf("**Usuario cadastrado com sucesso**\n");
     getchar();
     getchar();
     system("cls");
@@ -325,22 +327,22 @@ void cadastrarUsuario(struct Usuario usuarios[],int *numUsuarios){
 void cadastrarBibliotecario(struct Bibliotecario bibliotecarios[],int *numBibliotecarios){
    int codigoduplicado;
     if(*numBibliotecarios >= max_bibliotecarios){
-        printf("***Limite de bibliotecários atingido\n***");
+        printf("***Limite de bibliotecarios atingido\n***");
         return;
     }
-    printf("\n###Cadastro de bibliotecários###\n");
+    printf("\n###Cadastro de bibliotecarios###\n");
     printf("digite o nome: ");
     scanf(" %[^\n]s", &bibliotecarios[*numBibliotecarios].nome);
     printf("digite a senha: ");
     scanf(" %[^\n]s", &bibliotecarios[*numBibliotecarios].senha);
     do{
         codigoduplicado = 0;//variavel criada para verificar se o codigo ja existe ou nao.
-    printf("Digite o código de resgistro do Bibliotecário: ");
+    printf("Digite o codigo de resgistro do Bibliotecario: ");
     scanf(" %[^\n]s", &bibliotecarios[*numBibliotecarios].cod_b);
 
     for(int i = 0;i < *numBibliotecarios;i++){//for procura o bibliotecario e comprara se ele tem o msm codigo, com strcmp que compara strings.
         if(strcmp(bibliotecarios[i].cod_b,bibliotecarios[*numBibliotecarios].cod_b)== 0){
-            printf("\n**Código já cadastrado, digite um código válido**\n ");
+            printf("\n**Codigo ja cadastrado, digite um codigo valido**\n ");
             codigoduplicado = 1;
             break;
         }
@@ -348,7 +350,7 @@ void cadastrarBibliotecario(struct Bibliotecario bibliotecarios[],int *numBiblio
     }while(codigoduplicado);
     
     (*numBibliotecarios)++;
-    printf("\n**bibliotecário %s cadastrado com sucesso**\n",bibliotecarios[*numBibliotecarios - 1].nome);//- 1 para ter acesso ao ultimo registro.
+    printf("\n**bibliotecario %s cadastrado com sucesso**\n",bibliotecarios[*numBibliotecarios - 1].nome);//- 1 para ter acesso ao ultimo registro.
     getchar();
     getchar();
     system("cls");
@@ -369,11 +371,11 @@ void cadastrarLivro(struct Livro livros[],int *numLivros){
     scanf(" %[^\n]s", &livros[*numLivros].autor);
     do{
         livroDuplicado = 0;
-        printf("código: "); 
+        printf("codigo: "); 
         scanf(" %[^\n]s", &livros[*numLivros].cod_li);
         for(int i =0;i < *numLivros;i++){
             if(strcmp(livros[i].cod_li,livros[*numLivros].cod_li)==0){
-                printf("\nCódigo já cadastrado, digite outro.\n");
+                printf("\nCodigo ja cadastrado, digite outro.\n");
                 livroDuplicado = 1;
                 break;
             }
@@ -381,7 +383,7 @@ void cadastrarLivro(struct Livro livros[],int *numLivros){
     }while(livroDuplicado);
     livros[*numLivros].disponivel = 1;
     (*numLivros)++;
-    printf("\n**Livro: %s - Autor: %s cadrastado com sucesso**\n",livros[*numLivros -1].nome,livros[*numLivros -1].autor);
+    printf("\n**Livro: %s - Autor: %s, cadastrado com sucesso**\n",livros[*numLivros -1].nome,livros[*numLivros -1].autor);
     getchar();
     getchar();
     system("cls");
@@ -391,7 +393,7 @@ int validarLogin(struct Bibliotecario bibliotecarios[], int numBibliotecarios){
     char nome[30], senha[20];
     int i;
     printf("\n=================================\n");
-    printf(" **Bibliotecário seja Bem vindo**\n");
+    printf(" **Bibliotecario seja Bem vindo**\n");
     printf("=================================\n");
     printf("##Login##\n");
     printf("Nome: ");
@@ -409,7 +411,7 @@ int validarLogin(struct Bibliotecario bibliotecarios[], int numBibliotecarios){
         }
 
     }
-    printf("**Nome ou Senha inválida,**.\n  Enter para voltar");
+    printf("**Nome ou Senha invalida,**.\n  Enter para voltar");
     getchar();//para pausar o progama para n ir para procima tela direto
     getchar();
     system("cls");
@@ -435,7 +437,7 @@ int validarLoginAdm(struct Admin admins[], int numAdmins){
             return 1;
         }
     }
-    printf(" **Admin ou senha inválida** \n Enter para voltar");
+    printf(" **Admin ou senha invalida** \n Enter para voltar");
     getchar();
     getchar();
     system("cls");
@@ -465,7 +467,7 @@ void exibirLivros(struct Livro livros[],int numLivros){
     printf("\n###Livros cadastrados###\n");
     // int i = 0: significa que o contador i em 0, indica que o primeiro livro está na posição 0 do array.
     for(int i = 0;i < numLivros;i++){
-        printf("%d. Livro: %s - (Autor): %s - código: *%s* (%s)\n",i+1,livros[i].nome,livros[i].autor,livros[i].cod_li,livros[i].disponivel ?"Disponivel":"Reservado");
+        printf("%d. Livro: %s - (Autor): %s - codigo: *%s* (%s)\n",i+1,livros[i].nome,livros[i].autor,livros[i].cod_li,livros[i].disponivel ?"Disponivel":"Reservado");
     }
     printf("\n\n**Aperte enter para voltar**");
     getchar();
@@ -477,12 +479,12 @@ void exibirLivros(struct Livro livros[],int numLivros){
 void exibirUsuarios(struct Usuario usuarios[],int numUsuarios){
     
     if(numUsuarios == 0){
-        printf("\nNenhum usuário cadastrado\n");
+        printf("\nNenhum usuario cadastrado\n");
         getchar();
         return;
     }
     
-    printf("\n###Usuários cadastrados###\n");
+    printf("\n###Usuarios cadastrados###\n");
     for(int i = 0;i < numUsuarios;i++){
         printf("%d. Nome: %s - Idade: %d - RA: %s\n",i+1,usuarios[i].nome,usuarios[i].idade,usuarios[i].RA);
     }
@@ -495,14 +497,14 @@ void exibirUsuarios(struct Usuario usuarios[],int numUsuarios){
 void exibirEmprestimos(struct Emprestimo emprestimos[],int numEmprestimos){
     
     if(numEmprestimos == 0){
-        printf("\nNenhum empréstimo cadastrado\n");
+        printf("\nNenhum emprestimo cadastrado\n");
         getchar();
         return;
     }
     
-    printf("\n###Empréstimos cadastrados###\n");
+    printf("\n###Emprestimos cadastrados###\n");
     for(int i = 0;i < numEmprestimos;i++){
-        printf("%d. Código do Livro: %s - RA do Usuário: %s\n",i+1,emprestimos[i].cod_li,emprestimos[i].RA);
+        printf("%d. Codigo do Livro: %s - RA do Usuario: %s\n",i+1,emprestimos[i].cod_li,emprestimos[i].RA);
     }
     printf("\n\n**Aperte enter para voltar**");
     getchar();
@@ -513,14 +515,14 @@ void exibirEmprestimos(struct Emprestimo emprestimos[],int numEmprestimos){
 void exibirBibliotecarios(struct Bibliotecario bibliotecarios[],int numBibliotecarios){
    
    if(numBibliotecarios== 0){
-        printf("\nNenhum bibliotecário cadastrado\n");
+        printf("\nNenhum bibliotecario cadastrado\n");
         getchar();
         return;
     }
    
-    printf("\n###Bibliotecários cadastrados###\n");
+    printf("\n###Bibliotecarios cadastrados###\n");
     for(int i=0;i <numBibliotecarios;i++){
-        printf("%d. Bibliotecário: %s - Código: %s\n",i+1,bibliotecarios[i].nome,bibliotecarios[i].cod_b);
+        printf("%d. Bibliotecario: %s - Codigo: %s\n",i+1,bibliotecarios[i].nome,bibliotecarios[i].cod_b);
     }
     printf("\n\n**Aperte enter para voltar**");
     getchar();
@@ -538,14 +540,14 @@ void excluirLivros(struct Livro livros[],int *numLivros){
     }
     printf("\n###Livros cadastrados###\n");
     for(int j = 0;j < *numLivros;j++){
-        printf("%d. Livro: %s - (Autor): %s - código: *%s* (%s)\n",j+1,livros[j].nome,livros[j].autor,livros[j].cod_li,livros[j].disponivel ?"Disponivel":"Reservado");
+        printf("%d. Livro: %s - (Autor): %s - codigo: *%s* (%s)\n",j+1,livros[j].nome,livros[j].autor,livros[j].cod_li,livros[j].disponivel ?"Disponivel":"Reservado");
     }
-    printf("Digite o numero do livro que deseja excluir: ");
+    printf("Digite um numero de acordo com a lista para o livro que deseja excluir: ");
     scanf("%d",&escolha);
     getchar();
 
     if(escolha < 1 || escolha > *numLivros){
-        printf("Opcao inválida.\n");
+        printf("Opcao invalida.\n");
         getchar();
         system("cls");
         return;
@@ -564,21 +566,22 @@ void excluirUsuarios(struct Usuario usuarios[],int *numUsuarios){
     int escolha;
 
     if(*numUsuarios == 0){
-        printf("Nenhum usuário cadastrado.\n");
+        printf("Nenhum usuario cadastrado.\n");
         getchar();
         return;
     }
-    printf("\n###Usuários cadastrados###\n");
+    printf("\n###Usuarios cadastrados###\n");
     for(int j = 0;j < *numUsuarios;j++){
         printf("%d. Nome: %s - Idade: %d - RA: %s\n",j+1,usuarios[j].nome,usuarios[j].idade,usuarios[j].RA);
     }
-    printf("Digite o numero do usuário que deseja excluir: ");
+    printf("Digite um numero de acordo com a lista para o usuario que deseja excluir: ");
     scanf("%d",&escolha);
     getchar();
 
     if(escolha < 1 || escolha > *numUsuarios){
-        printf("opcao inválida.\n");
+        printf("opcao invalida.\n");
         getchar();
+        system("cls");
 
         return;
     }
@@ -586,7 +589,7 @@ void excluirUsuarios(struct Usuario usuarios[],int *numUsuarios){
         (usuarios[i]=usuarios[i+1]);
     }
     (*numUsuarios)--;
-     printf("\n**Usuário excluido com sucesso**\n");
+     printf("\n**Usuario excluido com sucesso**\n");
     getchar();
     system("cls");
 }//Estrutura para excluir usuarios.
@@ -595,21 +598,21 @@ void excluirBibliotecarios(struct Bibliotecario bibliotecarios[],int *numBibliot
     int escolha;
 
     if(*numBibliotecarios == 0){
-        printf("Nenhum bibliotecário cadastrado.\n");
+        printf("Nenhum bibliotecario cadastrado.\n");
         getchar();
         return;
     }
-    printf("\n###Bibliotecários cadastrados###\n");
+    printf("\n###Bibliotecarios cadastrados###\n");
     for(int j=0;j < *numBibliotecarios;j++){
-        printf("%d. Bibliotecário: %s - Código: %s\n",j+1,bibliotecarios[j].nome,bibliotecarios[j].cod_b);
+        printf("%d. Bibliotecario: %s - Codigo: %s\n",j+1,bibliotecarios[j].nome,bibliotecarios[j].cod_b);
     }
-    printf("\n\nDigite o numero de acordo com a lista bibliotecário que deseja excluir: ");
+    printf("\n\nDigite um numero de acordo com a lista para o bibliotecario que deseja excluir: ");
     scanf("%d",&escolha);
     getchar();
     
 
     if(escolha < 1 || escolha > *numBibliotecarios){
-        printf("opcao inválida.\n");
+        printf("opcao invalida.\n");
         getchar();
         system("cls");
         return;
@@ -619,7 +622,7 @@ void excluirBibliotecarios(struct Bibliotecario bibliotecarios[],int *numBibliot
     }
     
     (*numBibliotecarios)--;
-     printf("\n**Bibliotecário excluido com sucesso**\n");
+     printf("\n**Bibliotecario excluido com sucesso**\n");
     getchar();
     system("cls");
 }//Estrutura para excluir bibliotecario.
@@ -628,12 +631,12 @@ void relatorios(struct Livro livros[],int *numLivros,struct Usuario usuarios[],i
     int menu_r;
     do{
     printf("\n=================================================\n");
-    printf(" Escolha qual lista de relatório deseja acessar. \n");
+    printf(" Escolha qual lista de relatorio deseja acessar. \n");
     printf("=================================================\n");
-    printf(" [1] Lista de Bibliotecários. \n");
-    printf(" [2] Lista de Usuários. \n");
+    printf(" [1] Lista de Bibliotecarios. \n");
+    printf(" [2] Lista de Usuarios. \n");
     printf(" [3] Lista de Livros. \n");
-    printf(" [4] Lista de Empréstimos.\n");
+    printf(" [4] Lista de Emprestimos.\n");
     printf(" [0] Para voltar. \n");
     scanf("%d", &menu_r);
     system("cls");
@@ -655,7 +658,7 @@ void relatorios(struct Livro livros[],int *numLivros,struct Usuario usuarios[],i
         printf(" Voltando ao menu anterior. ");
             break;
         default:
-        printf("\n Opcao inválida!! \n");
+        printf("\n Opcao invalida!! \n");
     }
   }while(menu_r != 0); 
 }
@@ -666,7 +669,7 @@ void exibirMenu(struct Livro livros[],int *numLivros,struct Usuario usuarios[],i
         printf("\n=========================\n");
         printf(" ***Escolha uma opcao*** \n");
         printf("=========================\n");
-        printf(" [1] Usuários. \n");
+        printf(" [1] Usuarios. \n");
         printf(" [2] Livros. \n");
         printf(" [3] Emprestar Livro. \n");
         printf(" [4] Devolver Livro.\n");
@@ -679,9 +682,9 @@ void exibirMenu(struct Livro livros[],int *numLivros,struct Usuario usuarios[],i
         switch (sub_menu) {
             case 1:
                 do {
-                    printf("\n [1] Cadastrar Usuários. \n");
-                    printf(" [2] Excluir Usuários. \n");
-                    printf(" [3] Atualizar cadastros de Usuários. \n");
+                    printf("\n [1] Cadastrar Usuarios. \n");
+                    printf(" [2] Excluir Usuarios. \n");
+                    printf(" [3] Atualizar cadastros de Usuarios. \n");
                     printf(" [0] voltar\n");
                     scanf("%d", &menu_u);
                     system("cls");
@@ -700,7 +703,7 @@ void exibirMenu(struct Livro livros[],int *numLivros,struct Usuario usuarios[],i
                             printf("\n Voltando ao menu anterior. ");
                             break;
                         default:
-                            printf("Opcao inválida!\n");
+                            printf("Opcao invalida!\n");
                             break;
                     }
                 } while (menu_u != 0);
@@ -728,7 +731,7 @@ void exibirMenu(struct Livro livros[],int *numLivros,struct Usuario usuarios[],i
                             printf("\n Voltando ao menu anterior. ");
                             break;
                         default:
-                            printf("Opcao inválida!\n");
+                            printf("Opcao invalida!\n");
                             break;
                     }
                 } while (menu_l != 0);
@@ -749,7 +752,7 @@ void exibirMenu(struct Livro livros[],int *numLivros,struct Usuario usuarios[],i
                 printf("Voltando ao menu principal...\n");
                 break;
             default:
-                printf("Opcao inválida!\n");
+                printf("Opcao invalida!\n");
                 break;
         }
 
@@ -762,8 +765,8 @@ void exibirMenuAdm(struct Livro livros[],int *numLivros,struct Usuario usuarios[
         printf("\n=================================\n");
         printf(" *** Bem vindo Administrador *** \n");
         printf("=================================\n");
-        printf("\n [1] Bibliotecário. \n");
-        printf(" [2] relatórios.\n");
+        printf("\n [1] Bibliotecario. \n");
+        printf(" [2] relatorios.\n");
         printf(" [0] Para voltar.\n");
         scanf("%d", &menu);
         system("cls");
@@ -772,11 +775,11 @@ void exibirMenuAdm(struct Livro livros[],int *numLivros,struct Usuario usuarios[
             case 1:  
             do{ 
                 printf("\n===============================\n");
-                printf(" ### Menu de Bibliotecário ### \n");
+                printf(" ### Menu de Bibliotecario ### \n");
                 printf("===============================\n");
-                printf("\n [1] Cadastrar Bibliotecário. \n");
-                printf(" [2] excluir Bibliotecário. \n");
-                printf(" [3] Atualizar cadastro de Bibliotecário. \n");
+                printf("\n [1] Cadastrar Bibliotecario. \n");
+                printf(" [2] excluir Bibliotecario. \n");
+                printf(" [3] Atualizar cadastro de Bibliotecario. \n");
                 printf(" [0] Para voltar.\n ");
                 scanf("%d", &menu_b);
                 getchar();
@@ -796,7 +799,7 @@ void exibirMenuAdm(struct Livro livros[],int *numLivros,struct Usuario usuarios[
                         printf("\n Voltando ao menu anterior \n");
                         break;
                         default:
-                        printf("\n Opcao inválida!! \n");
+                        printf("\n Opcao invalida!! \n");
                         break;
                 }
 
@@ -810,7 +813,7 @@ void exibirMenuAdm(struct Livro livros[],int *numLivros,struct Usuario usuarios[
                 printf(" Voltando ao menu anterior. \n");
                 break;
                 default:
-                printf("\n Opcao inválida!! \n");
+                printf("\n Opcao invalida!! \n");
 
         }
     }while(menu != 0);
@@ -832,7 +835,6 @@ int main(){
     int opcao1;
     memset(livros, 0, sizeof(livros));//limpesa de lixo de memória
     memset(bibliotecarios, 0, sizeof(bibliotecarios));
-    SetConsoleOutputCP(CP_UTF8);
     iniciarAdmins(admins, &numAdmins);
 
     do{
@@ -840,7 +842,7 @@ int main(){
         printf("#### Bem vindo a Biblioteca 'ds2p17' ####\n");
         printf("=========================================\n");
         printf(" [1] Entrar como Admin. \n");
-        printf(" [2] Entrar como Bibliotecários. \n");
+        printf(" [2] Entrar como Bibliotecarios. \n");
         printf(" [0] sair. \n");
         scanf("%d", &opcao1);
         system("cls");
@@ -861,7 +863,7 @@ int main(){
                 system("cls");
                 break;
             default:
-            printf(" Opcao inválida!! \n");
+            printf(" Opcao invalida!! \n");
         }
 
     }while(opcao1);
