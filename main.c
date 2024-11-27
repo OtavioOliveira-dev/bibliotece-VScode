@@ -50,7 +50,7 @@ printf("2. *Livros* permite o cadastro de livros assim como atualizacoes e sua e
 printf("3. *Emprestar Livro* permite o emprestimo de livros, utilizando o codigo do livro junto ao RA do usuario que deseja emprestar marcando o livro com (reservado).\n");
 printf("4. *Devolver Livro* permite a devolucao de livros, utilizando o codigo do livro junto ao RA do usuario marcando o livro como disponivel.\n");
 printf("5. *Relatorios* permite visualizar a lista de todos Bibliotecarios, Usuarios,Livros cadastrados e emprestimos no sistema.\n");
-printf("6. *(Leia)Manual de navegacao* permite a orientaçao das funcoes no menu de Bibliotecario.\n");
+printf("6. *(Leia) Manual de navegacao* permite a orientacao das funcoes no menu de Bibliotecario.\n");
 printf("0. *voltar* permite a volta ao menu anterior.\n");
 getchar();
 getchar();
@@ -286,7 +286,7 @@ void devolverLivro(struct Usuario usuarios[],int *numUsuarios,struct Livro livro
     }
     (*numEmprestimos)--;
 
-    printf("\nLivro: %s foi devolvido pelo usuario: %s com sucesso.",livros[livroInd].nome, usuarios[usuarioInd].nome);
+    printf("\nLivro: %s foi devolvido pelo usuario: %s com sucesso.\n",livros[livroInd].nome, usuarios[usuarioInd].nome);
     getchar();
     system("pause");
     system("cls");
